@@ -1,5 +1,5 @@
 CFLAGS = -std=c99 -fopenmp
-LDFLAGS = -lm
+LDLIBS = -lm
 
 all: test tpfft
 
