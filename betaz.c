@@ -34,7 +34,7 @@ void * cRealloc(void * old,int oldmax,int newmax,size_t elsize) {
 }
 
 //negative edge is considered in-bounds, positive edge is out-of-bounds
-double rewrap(double a, double L) {
+static double rewrap(double a, double L) {
   while(a>=L/2)
     a-=L;
   while(a<-L/2)
