@@ -13,6 +13,15 @@ void dumpRes(struct result res) {
     printf("%lf,%lf\n",res.qs[i],res.is[i]);
 }
 
+void rewrap(float * xs, int n, double l) {
+  for (int i=0; i<n; i++) {
+    while(xs[i] >= l)
+      xs[i]-=l;
+    while(xs[i] < 0)
+      xs[i]+=l;
+  }
+}
+
 int main(int argc, char *argv[]) {
 
   //get scattering lengths
@@ -73,13 +82,16 @@ int main(int argc, char *argv[]) {
   struct result res = {.nqs = nqs, .qs = qs, .is = tis};
 
   double ds = 1; //1 angstom bin size
-  int rci = 30; //30 angstom cutoff
+  int rci = 15; //30 angstom cutoff
   int simax = 199; //200 angstom limit
 
   fprintf(stderr,"Running pfft.\n");
   for (int i=0; i<getNFrames(d); i++) {
     getUnitCell(d,uc);
     getCoords(d,xs,ys,zs);
+    rewrap(xs,natom,uc[0]);
+    rewrap(ys,natom,uc[1]);
+    rewrap(zs,natom,uc[2]);
     memset(res.is,0,res.nqs*sizeof(double));
     pfft(ps,bz,bw,rci,ds,simax,res);
     for(int qi=0; qi<res.nqs; qi++) {
